@@ -85,34 +85,58 @@ export const SortingPage: React.FC = () => {
   }
 
   const selectionSort = async (desc: boolean) => {
-    const arr = [...array];
+    const arr = [...array].map(e => {
+      return { ...e, state: ElementStates.Default }
+    });
     const { length } = arr;
 
     for (let i = 0; i < length - 1; i++) {
+      arr[i].state = ElementStates.Changing;
       let maxInd = i;
       for (let j = i + 1; j < length; j++) {
+        arr[j].state = ElementStates.Changing;
+        setArray([...arr]);
+        await delay(500);
+
         if ((desc && arr[j].value > arr[maxInd].value) || (!desc && arr[j].value < arr[maxInd].value)) {
           maxInd = j;
         }
+        arr[j].state = ElementStates.Default;
       }
+
+      arr[i].state = ElementStates.Default;
       if (maxInd !== i) {
-        swap(arr, i, maxInd)
+        swap(arr, i, maxInd);
       }
+      arr[i].state = ElementStates.Modified;
     }
+    arr[arr.length - 1].state = ElementStates.Modified;
 
     setArray([...arr]);
   }
 
   const bubbleSort = async (desc: boolean) => {
-    const arr = [...array];
+    const arr = [...array].map(e => {
+      return { ...e, state: ElementStates.Default }
+    });
 
     for (let j = arr.length - 1; j > 0; j--) {
       for (let i = 0; i < j; i++) {
+        arr[i].state = ElementStates.Changing;
+        arr[i + 1].state = ElementStates.Changing;
+        setArray([...arr]);
+        await delay(500);
+
         if ((desc && arr[i].value < arr[i + 1].value) || (!desc && arr[i].value > arr[i + 1].value)) {
           swap(arr, i, i + 1);
         }
+        arr[i].state = ElementStates.Default;
+        arr[i + 1].state = ElementStates.Default;
       }
+      arr[j].state = ElementStates.Modified;
     }
+
+    arr[0].state = ElementStates.Modified;
 
     setArray([...arr]);
   }
