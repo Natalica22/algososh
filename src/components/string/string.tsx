@@ -43,7 +43,7 @@ export const StringComponent: React.FC = () => {
       lettersArray[i].state = ElementStates.Changing;
       lettersArray[j].state = ElementStates.Changing;
       setLetters([...lettersArray]);
-      await delay();
+      await delay(1000);
 
       const temp = lettersArray[i];
       lettersArray[i] = lettersArray[j];

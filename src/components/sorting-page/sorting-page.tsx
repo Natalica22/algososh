@@ -96,7 +96,7 @@ export const SortingPage: React.FC = () => {
       for (let j = i + 1; j < length; j++) {
         arr[j].state = ElementStates.Changing;
         setArray([...arr]);
-        await delay(500);
+        await delay();
 
         if ((desc && arr[j].value > arr[maxInd].value) || (!desc && arr[j].value < arr[maxInd].value)) {
           maxInd = j;
@@ -125,7 +125,7 @@ export const SortingPage: React.FC = () => {
         arr[i].state = ElementStates.Changing;
         arr[i + 1].state = ElementStates.Changing;
         setArray([...arr]);
-        await delay(500);
+        await delay();
 
         if ((desc && arr[i].value < arr[i + 1].value) || (!desc && arr[i].value > arr[i + 1].value)) {
           swap(arr, i, i + 1);

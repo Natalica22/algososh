@@ -6,6 +6,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Stack } from "./stack";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/delay";
 
 type Value = {
   value: string;
@@ -30,15 +31,25 @@ export const StackPage: React.FC = () => {
 
   const onPushClick = async (event: React.MouseEvent<HTMLElement>) => {
     setPushInProgress(true);
-    stack.push({ value: text, state: ElementStates.Default });
 
-    setStackView(stack.toArray());
+    stack.push({ value: text, state: ElementStates.Default });
+    const arr = stack.toArray();
+    arr[arr.length - 1].state = ElementStates.Changing;
+    setStackView([...arr]);
+    await delay();
+    arr[arr.length - 1].state = ElementStates.Default;
+    setStackView([...arr]);
+
     setText('');
     setPushInProgress(false);
   }
 
   const onPopClick = async (event: React.MouseEvent<HTMLElement>) => {
     setPopInProgress(true);
+    const arr = stack.toArray();
+    arr[arr.length - 1].state = ElementStates.Changing;
+    setStackView([...arr]);
+    await delay();
     stack.pop();
 
     setStackView(stack.toArray());
