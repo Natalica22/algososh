@@ -67,4 +67,12 @@ export class Queue<T> {
   getSize(): number {
     return this.size;
   }
+
+  getTail() {
+    return this.tail;
+  }
+
+  getHead() {
+    return this.head;
+  }
 }

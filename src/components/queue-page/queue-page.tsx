@@ -6,6 +6,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Queue } from "./queue";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/delay";
 
 type Value = {
   value: string;
@@ -32,7 +33,16 @@ export const QueuePage: React.FC = () => {
 
     queue.enqueue({ value: text, state: ElementStates.Default });
 
-    setQueueView([...queue.toArray()]);
+    const arr = queue.toArray();
+    const tailElem = arr[queue.getTail()].value;
+    if (tailElem !== undefined) {
+      tailElem.state = ElementStates.Changing;
+      setQueueView([...arr]);
+      await delay();
+      tailElem.state = ElementStates.Default;
+
+      setQueueView([...queue.toArray()]);
+    }
 
     setText('');
     setEnqueueInProgress(false);
@@ -40,6 +50,14 @@ export const QueuePage: React.FC = () => {
 
   const onDequeueClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDequeueInProgress(true);
+
+    const arr = queue.toArray();
+    const headElem = arr[queue.getHead()].value;
+    if (headElem !== undefined) {
+      headElem.state = ElementStates.Changing;
+      setQueueView([...arr]);
+      await delay();
+    }
 
     queue.dequeue();
 
