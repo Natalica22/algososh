@@ -28,7 +28,7 @@ export class LinkedList<T> {
     this.size += 1;
   }
 
-  removeHead() {
+  deleteHead() {
     if (this.head === null) {
       throw Error('List is empty');
     }
@@ -39,7 +39,7 @@ export class LinkedList<T> {
     }
   }
 
-  removeTail() {
+  deleteTail() {
     if (this.head === null) {
       throw Error('List is empty');
     }
@@ -47,6 +47,7 @@ export class LinkedList<T> {
     while (node !== null) {
       if (node.next === this.tail) {
         this.tail = node;
+        node.next = null;
         break;
       }
       node = node.next;
@@ -54,6 +55,7 @@ export class LinkedList<T> {
     this.size -= 1;
     if (this.size === 0) {
       this.tail = null;
+      this.head = null;
     }
   }
 
@@ -95,7 +97,7 @@ export class LinkedList<T> {
     }
 
     if (index === 0) {
-      this.removeHead();
+      this.deleteHead();
       return;
     }
 
@@ -119,7 +121,7 @@ export class LinkedList<T> {
 
   toArray() {
     const arr = [];
-    let node: Node<T> | null = this.head?.next || null;
+    let node = this.head;
     let count = 0;
     while (node !== null) {
       arr[count] = node.value;
