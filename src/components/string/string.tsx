@@ -33,6 +33,8 @@ export const StringComponent: React.FC = () => {
     const lettersArray = text.split('').map(e => {
       return { value: e, state: ElementStates.Default }
     });
+    setLetters([...lettersArray]);
+    await delay(1000);
 
     for (let i = 0; i < lettersArray.length / 2; i++) {
       const j = lettersArray.length - i - 1;
