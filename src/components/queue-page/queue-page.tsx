@@ -28,6 +28,7 @@ export const QueuePage: React.FC = () => {
     setEnqueueInProgress(true);
 
     queue.enqueue({ value: text, state: ElementStates.Default });
+    setText('');
 
     const arr = queue.toArray();
     const tailElem = arr[queue.getTail()].value;
@@ -40,7 +41,6 @@ export const QueuePage: React.FC = () => {
       setQueueView([...queue.toArray()]);
     }
 
-    setText('');
     setEnqueueInProgress(false);
   }
 

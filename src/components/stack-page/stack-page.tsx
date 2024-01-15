@@ -29,6 +29,7 @@ export const StackPage: React.FC = () => {
     setPushInProgress(true);
 
     stack.push({ value: text, state: ElementStates.Default });
+    setText('');
     const arr = stack.toArray();
     arr[arr.length - 1].state = ElementStates.Changing;
     setStackView([...arr]);
@@ -36,7 +37,6 @@ export const StackPage: React.FC = () => {
     arr[arr.length - 1].state = ElementStates.Default;
     setStackView([...arr]);
 
-    setText('');
     setPushInProgress(false);
   }
 
