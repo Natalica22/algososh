@@ -6,6 +6,21 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { delay } from "../../utils/delay";
 
+
+const getFibonacciNumbers = (size: number) => {
+  const fibonacciArray = new Array<number>();
+
+  for (let i = 0; i < 2; i++) {
+    fibonacciArray[i] = 1;
+  }
+
+  for (let i = 2; i <= size; i++) {
+    fibonacciArray[i] = fibonacciArray[i - 2] + fibonacciArray[i - 1];
+  }
+
+  return fibonacciArray;
+}
+
 export const FibonacciPage: React.FC = () => {
   const [number, setNumber] = useState(0);
   const [disabled, setDisabled] = useState(true);
@@ -26,19 +41,15 @@ export const FibonacciPage: React.FC = () => {
     generateFibonacci();
   }
 
+
   const generateFibonacci = async () => {
     setIsLoader(true);
-    const fibonacciArray: number[] = [];
+    const arr = getFibonacciNumbers(number);
+    const tempArray = [];
 
-    for (let i = 0; i < 2; i++) {
-      fibonacciArray[i] = 1;
-      setFibonacci([...fibonacciArray]);
-      await delay();
-    }
-
-    for (let i = 2; i <= number; i++) {
-      fibonacciArray[i] = fibonacciArray[i - 2] + fibonacciArray[i - 1];
-      setFibonacci([...fibonacciArray]);
+    for (let i = 0; i <= number; i++) {
+      tempArray[i] = arr[i];
+      setFibonacci([...tempArray]);
       await delay();
     }
 
