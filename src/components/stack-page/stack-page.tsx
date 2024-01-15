@@ -7,19 +7,15 @@ import { Circle } from "../ui/circle/circle";
 import { Stack } from "./stack";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-
-type Value = {
-  value: string;
-  state: ElementStates;
-}
+import { Value } from "../../types/value";
 
 const MAX_STACK_SIZE = 7;
 
 export const StackPage: React.FC = () => {
-  const stack = useMemo(() => new Stack<Value>(), []);
+  const stack = useMemo(() => new Stack<Value<string>>(), []);
 
   const [text, setText] = useState('');
-  const [stackView, setStackView] = useState([] as Value[]);
+  const [stackView, setStackView] = useState(stack.toArray());
   const [pushInProgress, setPushInProgress] = useState(false);
   const [popInProgress, setPopInProgress] = useState(false);
 

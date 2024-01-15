@@ -8,16 +8,12 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { LinkedList } from "./linked-list";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-
-type Value = {
-  value: string;
-  state: ElementStates;
-}
+import { Value } from "../../types/value";
 
 const MAX_LIST_SIZE = 6;
 
 export const ListPage: React.FC = () => {
-  const list = useMemo(() => new LinkedList<Value>(), []);
+  const list = useMemo(() => new LinkedList<Value<string>>(), []);
   const [text, setText] = useState('');
   const [index, setIndex] = useState(null as number | null);
   const [prependInProgress, setPrependInProgress] = useState(false);

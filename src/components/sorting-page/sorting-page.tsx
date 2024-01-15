@@ -7,21 +7,17 @@ import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
+import { Value } from "../../types/value";
 
 enum SortingMethod {
   Selection = "selection",
   Bubble = "bubble"
 }
 
-type Value = {
-  value: number;
-  state: ElementStates;
-}
-
 const MAX_ARRAY_SIZE = 17;
 const MIN_ARRAY_SIZE = 3;
 
-const swap = (arr: Value[], firstIndex: number, secondIndex: number): void => {
+const swap = (arr: Value<number>[], firstIndex: number, secondIndex: number): void => {
   const temp = arr[firstIndex];
   arr[firstIndex] = arr[secondIndex];
   arr[secondIndex] = temp;
@@ -32,7 +28,7 @@ const getRandomFromInterval = (min: number, max: number) => {
 }
 
 export const SortingPage: React.FC = () => {
-  const [array, setArray] = useState([] as Value[]);
+  const [array, setArray] = useState([] as Value<number>[]);
   const [method, setMethod] = useState(SortingMethod.Selection);
 
   const [ascendingInProgress, setAscendingInProgress] = useState(false);
@@ -44,7 +40,7 @@ export const SortingPage: React.FC = () => {
 
   const randomArr = () => {
     const size = getRandomFromInterval(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
-    const arr = new Array<Value>(size);
+    const arr = new Array<Value<number>>(size);
 
     for (let i = 0; i < size; i++) {
       arr[i] = {

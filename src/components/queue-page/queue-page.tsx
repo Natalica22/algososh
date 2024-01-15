@@ -7,16 +7,12 @@ import { Circle } from "../ui/circle/circle";
 import { Queue } from "./queue";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-
-type Value = {
-  value: string;
-  state: ElementStates;
-}
+import { Value } from "../../types/value";
 
 const MAX_QUEUE_SIZE = 7;
 
 export const QueuePage: React.FC = () => {
-  const queue = useMemo(() => new Queue<Value>(MAX_QUEUE_SIZE), []);
+  const queue = useMemo(() => new Queue<Value<string>>(MAX_QUEUE_SIZE), []);
   const [text, setText] = useState('');
   const [queueView, setQueueView] = useState(queue.toArray());
   const [enqueueInProgress, setEnqueueInProgress] = useState(false);

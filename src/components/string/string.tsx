@@ -6,18 +6,14 @@ import styles from "./string.module.css";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-
-type Letter = {
-  letter: string;
-  state: ElementStates;
-}
+import { Value } from "../../types/value";
 
 export const StringComponent: React.FC = () => {
   const [text, setText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [isLoader, setIsLoader] = useState(false);
 
-  const [letters, setLetters] = useState([] as Letter[]);
+  const [letters, setLetters] = useState([] as Value<string>[]);
 
   const onInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -35,7 +31,7 @@ export const StringComponent: React.FC = () => {
   const reverseString = async () => {
     setIsLoader(true);
     const lettersArray = text.split('').map(e => {
-      return { letter: e, state: ElementStates.Default }
+      return { value: e, state: ElementStates.Default }
     });
 
     for (let i = 0; i < lettersArray.length / 2; i++) {
@@ -66,7 +62,7 @@ export const StringComponent: React.FC = () => {
           <Button text='Развернуть' disabled={disabled} isLoader={isLoader} type='submit' />
         </form>
         <div className={styles.circles}>
-          {letters.map((elem, i) => <Circle letter={elem.letter} state={elem.state} key={i} />)}
+          {letters.map((elem, i) => <Circle letter={elem.value} state={elem.state} key={i} />)}
         </div>
       </div>
     </SolutionLayout>
