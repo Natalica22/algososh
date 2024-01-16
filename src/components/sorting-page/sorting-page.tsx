@@ -8,6 +8,7 @@ import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
 import { Value } from "../../types/value";
+import { createArray } from "../../utils/random";
 
 enum SortingMethod {
   Selection = "selection",
@@ -23,10 +24,6 @@ const swap = (arr: Value<number>[], firstIndex: number, secondIndex: number): vo
   arr[secondIndex] = temp;
 };
 
-const getRandomFromInterval = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState([] as Value<number>[]);
   const [method, setMethod] = useState(SortingMethod.Selection);
@@ -39,15 +36,7 @@ export const SortingPage: React.FC = () => {
   }
 
   const randomArr = () => {
-    const size = getRandomFromInterval(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE);
-    const arr = new Array<Value<number>>(size);
-
-    for (let i = 0; i < size; i++) {
-      arr[i] = {
-        value: getRandomFromInterval(0, 100),
-        state: ElementStates.Default
-      }
-    }
+    const arr = createArray(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE, 0, 100);
     setArray([...arr]);
   }
 
@@ -137,7 +126,7 @@ export const SortingPage: React.FC = () => {
     setArray([...arr]);
   }
 
-  useEffect(() => randomArr(), []); 
+  useEffect(() => randomArr(), []);
 
   return (
     <SolutionLayout title="Сортировка массива">

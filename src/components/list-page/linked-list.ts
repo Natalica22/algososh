@@ -7,6 +7,10 @@ export class LinkedList<T> {
   private tail: Node<T> | null = null;
   private size: number = 0;
 
+  constructor(array: T[] = []) {
+    array.forEach(elem => this.append(elem));
+  }
+
   prepend(item: T) {
     const node = new Node(item, this.head);
     this.head = node;

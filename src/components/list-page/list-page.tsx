@@ -9,11 +9,16 @@ import { LinkedList } from "./linked-list";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
 import { Value } from "../../types/value";
+import { createArray } from "../../utils/random";
 
 const MAX_LIST_SIZE = 6;
 
 export const ListPage: React.FC = () => {
-  const list = useMemo(() => new LinkedList<Value<string>>(), []);
+  const initArray = useMemo(() => createArray(3, 6, 0, 9999).map(x => {
+     return {...x, value: x.value.toString() }
+  }), []);
+
+  const list = useMemo(() => new LinkedList<Value<string>>(initArray), [initArray]);
   const [text, setText] = useState('');
   const [index, setIndex] = useState(null as number | null);
   const [prependInProgress, setPrependInProgress] = useState(false);
