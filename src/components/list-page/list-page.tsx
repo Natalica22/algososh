@@ -31,6 +31,8 @@ export const ListPage: React.FC = () => {
   const [appendInProgress, setAppendInProgress] = useState(false);
   const [deleteHeadInProgress, setDeleteHeadInProgress] = useState(false);
   const [deleteTailInProgress, setDeleteTailInProgress] = useState(false);
+  const [addByIndexInProgress, setAddByIndexInProgress] = useState(false);
+  const [deleteByIndexInProgress, setDeleteByIndexInProgress] = useState(false);
 
   const listToView = () => {
     return list.toArray().map(elem => {
@@ -48,8 +50,8 @@ export const ListPage: React.FC = () => {
 
   const onIndexInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    const valueInt = parseInt(value)
-    setIndex(valueInt);
+    const valueInt = parseInt(value);
+    setIndex(valueInt > list.getSize() - 1 ? null : valueInt);
   }
 
   const onPrependClick = async (event: React.MouseEvent<HTMLElement>) => {
@@ -123,26 +125,54 @@ export const ListPage: React.FC = () => {
     setDeleteTailInProgress(false);
   }
 
+  const onAddByIndexClick = async (event: React.MouseEvent<HTMLElement>) => {
+    setAddByIndexInProgress(true);
+    list.addByIndex({ value: text, state: ElementStates.Default }, index as number);
+    setText('');
+    setIndex(null);
+    await delay();
+
+    setListView([...listToView()]);
+
+    setAddByIndexInProgress(false);
+  }
+
+  const onDeleteByIndexClick = async (event: React.MouseEvent<HTMLElement>) => {
+    setDeleteByIndexInProgress(true);
+    list.deleteByIndex(index as number);
+    setIndex(null);
+    await delay();
+
+    setListView([...listToView()]);
+
+    setDeleteByIndexInProgress(false);
+  }
+
+  const buttonsDisabled = prependInProgress || appendInProgress || deleteHeadInProgress || deleteTailInProgress || addByIndexInProgress || deleteByIndexInProgress;
+
   return (
     <SolutionLayout title="Связный список">
       <div className={styles.container}>
         <div className={styles.menu}>
           <div className={styles.menu_row}>
             <Input placeholder='Введите значение' maxLength={4} isLimitText={true} extraClass={styles.input} value={text} onChange={onTextInputChanged}
-              disabled={list.getSize() === MAX_LIST_SIZE || prependInProgress || appendInProgress || deleteHeadInProgress || deleteTailInProgress} />
+              disabled={list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
             <Button text='Добавить в head' extraClass={styles.button} isLoader={prependInProgress} onClick={onPrependClick}
-              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || appendInProgress || deleteHeadInProgress || deleteTailInProgress} />
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
             <Button text='Добавить в tail' extraClass={styles.button} isLoader={appendInProgress} onClick={onAppendClick}
-              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || prependInProgress || deleteHeadInProgress || deleteTailInProgress} />
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
             <Button text='Удалить из head' extraClass={styles.button} isLoader={deleteHeadInProgress} onClick={onDeleteHeadClick}
-              disabled={list.getSize() === 0 || prependInProgress || appendInProgress || deleteTailInProgress} />
+              disabled={list.getSize() === 0 || buttonsDisabled} />
             <Button text='Удалить из tail' extraClass={styles.button} isLoader={deleteTailInProgress} onClick={onDeleteTailClick}
-              disabled={list.getSize() === 0 || prependInProgress || appendInProgress || deleteHeadInProgress} />
+              disabled={list.getSize() === 0 || buttonsDisabled} />
           </div>
           <div className={styles.menu_row}>
-            <Input placeholder='Введите индекс' extraClass={styles.input} value={index?.toString()} onChange={onIndexInputChanged} />
-            <Button text='Добавить по индексу' extraClass={styles.big_button} />
-            <Button text='Удалить по индексу' extraClass={styles.big_button} />
+            <Input placeholder='Введите индекс' extraClass={styles.input} value={index === null ? '' : index.toString()} onChange={onIndexInputChanged}
+              disabled={buttonsDisabled} max={list.getSize() - 1} type='number' />
+            <Button text='Добавить по индексу' extraClass={styles.big_button} isLoader={addByIndexInProgress}
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled || index === null} onClick={onAddByIndexClick} />
+            <Button text='Удалить по индексу' extraClass={styles.big_button} isLoader={deleteByIndexInProgress}
+              disabled={list.getSize() === 0 || buttonsDisabled || index === null} onClick={onDeleteByIndexClick} />
           </div>
         </div>
         <div className={styles.list}>

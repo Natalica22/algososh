@@ -63,7 +63,7 @@ export class LinkedList<T> {
     }
   }
 
-  insertAt(item: T, index: number) {
+  addByIndex(item: T, index: number) {
     if (index < 0 || index >= this.size) {
       throw Error('Index is out of bounds');
     }
@@ -92,7 +92,7 @@ export class LinkedList<T> {
     this.size += 1;
   }
 
-  removeAt(index: number) {
+  deleteByIndex(index: number) {
     if (index < 0 || index >= this.size) {
       throw Error('Index is out of bounds');
     }
