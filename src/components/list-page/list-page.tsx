@@ -11,11 +11,17 @@ import { delay } from "../../utils/delay";
 import { Value } from "../../types/value";
 import { createArray } from "../../utils/random";
 
+type ValueView<T> = {
+  value: Value<T>;
+  insert?: Value<T> | null;
+  delete?: Value<T> | null;
+}
+
 const MAX_LIST_SIZE = 6;
 
 export const ListPage: React.FC = () => {
   const initArray = useMemo(() => createArray(3, 6, 0, 9999).map(x => {
-     return {...x, value: x.value.toString() }
+    return { ...x, value: x.value.toString() }
   }), []);
 
   const list = useMemo(() => new LinkedList<Value<string>>(initArray), [initArray]);
@@ -26,7 +32,13 @@ export const ListPage: React.FC = () => {
   const [deleteHeadInProgress, setDeleteHeadInProgress] = useState(false);
   const [deleteTailInProgress, setDeleteTailInProgress] = useState(false);
 
-  const [listView, setListView] = useState(list.toArray());
+  const listToView = () => {
+    return list.toArray().map(elem => {
+      return { value: elem }
+    }) as ValueView<string>[]
+  }
+
+  const [listView, setListView] = useState([...listToView()]);
 
   const onTextInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -42,39 +54,72 @@ export const ListPage: React.FC = () => {
 
   const onPrependClick = async (event: React.MouseEvent<HTMLElement>) => {
     setPrependInProgress(true);
-    list.prepend({ value: text, state: ElementStates.Default });
-    setText('');
+    let arr = listToView();
+    if (arr.length !== 0) {
+      arr[0].insert = { value: text, state: ElementStates.Changing }
+    }
+    setListView([...arr]);
     await delay();
 
-    setListView([...list.toArray()]);
+    list.prepend({ value: text, state: ElementStates.Default });
+    setText('');
+    arr = listToView();
+    arr[0].value.state = ElementStates.Modified;
+    setListView([...arr]);
+    await delay();
+    arr[0].value.state = ElementStates.Default;
+    setListView([...arr]);
+
     setPrependInProgress(false);
   }
 
   const onAppendClick = async (event: React.MouseEvent<HTMLElement>) => {
     setAppendInProgress(true);
-    list.append({ value: text, state: ElementStates.Default });
-    setText('');
+    let arr = listToView();
+    if (arr.length !== 0) {
+      arr[arr.length - 1].insert = { value: text, state: ElementStates.Changing };
+    }
+    setListView([...arr]);
     await delay();
 
-    setListView([...list.toArray()]);
+    list.append({ value: text, state: ElementStates.Default });
+    setText('');
+    arr = listToView();
+    arr[arr.length - 1].value.state = ElementStates.Modified;
+    setListView([...arr]);
+    await delay();
+    arr[arr.length - 1].value.state = ElementStates.Default;
+    setListView([...arr]);
+
     setAppendInProgress(false);
   }
 
   const onDeleteHeadClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDeleteHeadInProgress(true);
-    list.deleteHead();
+    const arr = listToView();
+    arr[0].delete = { value: arr[0].value.value, state: ElementStates.Changing };
+    arr[0].value.value = '';
+    setListView([...arr]);
     await delay();
 
-    setListView([...list.toArray()]);
+    list.deleteHead();
+
+    setListView([...listToView()]);
     setDeleteHeadInProgress(false);
   }
 
   const onDeleteTailClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDeleteTailInProgress(true);
-    list.deleteTail();
+    const arr = listToView();
+    const lastIndex = arr.length - 1;
+    arr[lastIndex].delete = { value: arr[lastIndex].value.value, state: ElementStates.Changing };
+    arr[lastIndex].value.value = '';
+    setListView([...arr]);
     await delay();
 
-    setListView([...list.toArray()]);
+    list.deleteTail();
+
+    setListView([...listToView()]);
     setDeleteTailInProgress(false);
   }
 
@@ -103,9 +148,9 @@ export const ListPage: React.FC = () => {
         <div className={styles.list}>
           {listView.map((elem, i) => {
             return (<div key={i} className={styles.list_elem}>
-              {(i === 1) && <Circle isSmall={true} extraClass={styles.top_circle} />}
-              {(i === 2) && <Circle isSmall={true} extraClass={styles.bottom_circle} />}
-              <Circle letter={elem.value} state={elem.state} index={i} head={i === 0 ? 'head' : ''} tail={i === listView.length - 1 ? 'tail' : ''} />
+              {elem.insert && <Circle isSmall={true} extraClass={styles.top_circle} letter={elem.insert.value} state={ElementStates.Changing} />}
+              {elem.delete && <Circle isSmall={true} extraClass={styles.bottom_circle} letter={elem.delete.value} state={ElementStates.Changing} />}
+              <Circle letter={elem.value.value} state={elem.value.state} index={i} head={i === 0 && !elem.insert ? 'head' : ''} tail={i === listView.length - 1 && !elem.delete ? 'tail' : ''} />
               {(i !== listView.length - 1) && <ArrowIcon />}
             </div>)
           })}
