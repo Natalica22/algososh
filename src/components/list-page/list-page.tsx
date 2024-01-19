@@ -65,6 +65,7 @@ export const ListPage: React.FC = () => {
 
     list.prepend({ value: text, state: ElementStates.Default });
     setText('');
+    setIndex(null);
     arr = listToView();
     arr[0].value.state = ElementStates.Modified;
     setListView([...arr]);
@@ -86,6 +87,7 @@ export const ListPage: React.FC = () => {
 
     list.append({ value: text, state: ElementStates.Default });
     setText('');
+    setIndex(null);
     arr = listToView();
     arr[arr.length - 1].value.state = ElementStates.Modified;
     setListView([...arr]);
@@ -98,6 +100,7 @@ export const ListPage: React.FC = () => {
 
   const onDeleteHeadClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDeleteHeadInProgress(true);
+    setIndex(null);
     const arr = listToView();
     arr[0].delete = { value: arr[0].value.value, state: ElementStates.Changing };
     arr[0].value.value = '';
@@ -112,6 +115,7 @@ export const ListPage: React.FC = () => {
 
   const onDeleteTailClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDeleteTailInProgress(true);
+    setIndex(null);
     const arr = listToView();
     const lastIndex = arr.length - 1;
     arr[lastIndex].delete = { value: arr[lastIndex].value.value, state: ElementStates.Changing };
@@ -127,28 +131,64 @@ export const ListPage: React.FC = () => {
 
   const onAddByIndexClick = async (event: React.MouseEvent<HTMLElement>) => {
     setAddByIndexInProgress(true);
-    list.addByIndex({ value: text, state: ElementStates.Default }, index as number);
+
+    let arr = listToView();
+    const ind = index as number;
+    for (let i = 0; i <= ind; i++) {
+      arr[i].insert = { value: text, state: ElementStates.Changing };
+      setListView([...arr]);
+      await delay();
+      arr[i].insert = null;
+      arr[i].value.state = ElementStates.Changing;
+    }
+    arr[ind].value.state = ElementStates.Default;
+
+    list.addByIndex({ value: text, state: ElementStates.Default }, ind);
+    arr = listToView();
+    arr[ind].value.state = ElementStates.Modified;
+    setListView([...arr]);
     setText('');
     setIndex(null);
     await delay();
 
-    setListView([...listToView()]);
+    for (let i = 0; i <= ind; i++) {
+      arr[i].value.state = ElementStates.Default;
+    }
+    setListView([...arr]);
 
     setAddByIndexInProgress(false);
   }
 
   const onDeleteByIndexClick = async (event: React.MouseEvent<HTMLElement>) => {
     setDeleteByIndexInProgress(true);
-    list.deleteByIndex(index as number);
-    setIndex(null);
+
+    let arr = listToView();
+    const ind = index as number;
+    for (let i = 0; i <= ind; i++) {
+      arr[i].value.state = ElementStates.Changing;
+      setListView([...arr]);
+      await delay();
+    }
+    arr[ind].delete = { value: arr[ind].value.value, state: ElementStates.Changing };
+    arr[ind].value.value = '';
+    setListView([...arr]);
     await delay();
 
-    setListView([...listToView()]);
+    list.deleteByIndex(ind);
+    setIndex(null);
+
+    arr = listToView();
+    for (let i = 0; i < ind; i++) {
+      arr[i].value.state = ElementStates.Default;
+    }
+
+    setListView([...arr]);
 
     setDeleteByIndexInProgress(false);
   }
 
   const buttonsDisabled = prependInProgress || appendInProgress || deleteHeadInProgress || deleteTailInProgress || addByIndexInProgress || deleteByIndexInProgress;
+  const deleteInProgress = deleteByIndexInProgress || deleteHeadInProgress || deleteTailInProgress;
 
   return (
     <SolutionLayout title="Связный список">
@@ -180,8 +220,9 @@ export const ListPage: React.FC = () => {
             return (<div key={i} className={styles.list_elem}>
               {elem.insert && <Circle isSmall={true} extraClass={styles.top_circle} letter={elem.insert.value} state={ElementStates.Changing} />}
               {elem.delete && <Circle isSmall={true} extraClass={styles.bottom_circle} letter={elem.delete.value} state={ElementStates.Changing} />}
+              {(deleteInProgress && i !== 0) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
               <Circle letter={elem.value.value} state={elem.value.state} index={i} head={i === 0 && !elem.insert ? 'head' : ''} tail={i === listView.length - 1 && !elem.delete ? 'tail' : ''} />
-              {(i !== listView.length - 1) && <ArrowIcon />}
+              {(!deleteInProgress && i !== listView.length - 1) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
             </div>)
           })}
         </div>
