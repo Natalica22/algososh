@@ -9,6 +9,7 @@ import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
 import { Value } from "../../types/value";
 import { createArray } from "../../utils/random";
+import { swap } from "../../utils/array";
 
 enum SortingMethod {
   Selection = "selection",
@@ -17,12 +18,6 @@ enum SortingMethod {
 
 const MAX_ARRAY_SIZE = 17;
 const MIN_ARRAY_SIZE = 3;
-
-const swap = (arr: Value<number>[], firstIndex: number, secondIndex: number): void => {
-  const temp = arr[firstIndex];
-  arr[firstIndex] = arr[secondIndex];
-  arr[secondIndex] = temp;
-};
 
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<Value<number>[]>([]);

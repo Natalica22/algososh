@@ -6,21 +6,22 @@ import styles from "./string.module.css";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-import { Value } from "../../types/value";
 import { DELAY_IN_MS } from "../../constants/delays";
+import { getReversingStringSteps } from "./utils";
 
 export const StringComponent: React.FC = () => {
   const [text, setText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [isLoader, setIsLoader] = useState(false);
+  const [stepIndex, setStepIndex] = useState<number | null>(null);
 
-  const [letters, setLetters] = useState<Value<string>[]>([]);
+  const [letters, setLetters] = useState<string[]>([]);
 
   const onInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     setText(value);
-    setDisabled(value.length === 0);
+    setDisabled(value.length < 2);
   }
 
   const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -30,31 +31,35 @@ export const StringComponent: React.FC = () => {
   }
 
   const reverseString = async () => {
+    setStepIndex(null);
     setIsLoader(true);
-    const lettersArray = text.split('').map(e => {
-      return { value: e, state: ElementStates.Default }
-    });
-    setLetters([...lettersArray]);
+
+    const steps = getReversingStringSteps(text);
+
+    setLetters(steps[0]);
     await delay(DELAY_IN_MS);
 
-    for (let i = 0; i < lettersArray.length / 2; i++) {
-      const j = lettersArray.length - i - 1;
-      lettersArray[i].state = ElementStates.Changing;
-      lettersArray[j].state = ElementStates.Changing;
-      setLetters([...lettersArray]);
-      await delay(1000);
-
-      const temp = lettersArray[i];
-      lettersArray[i] = lettersArray[j];
-      lettersArray[j] = temp;
-
-      lettersArray[i].state = ElementStates.Modified;
-      lettersArray[j].state = ElementStates.Modified;
+    for (let i = 0; i < steps.length; i++) {
+      setStepIndex(i);
+      setLetters(steps[i]);
+      await delay(DELAY_IN_MS);
     }
 
-    setLetters([...lettersArray]);
-
     setIsLoader(false);
+  }
+
+  const getLetterState = (index: number): ElementStates => {
+    if (stepIndex === null) {
+      return ElementStates.Default;
+    }
+    const stringSize = letters.length;
+    if (index < stepIndex || index > stringSize - 1 - stepIndex) {
+      return ElementStates.Modified;
+    }
+    if (index === stepIndex || index === stringSize - 1 - stepIndex) {
+      return ElementStates.Changing;
+    }
+    return ElementStates.Default;
   }
 
   return (
@@ -65,7 +70,7 @@ export const StringComponent: React.FC = () => {
           <Button text='Развернуть' disabled={disabled} isLoader={isLoader} type='submit' />
         </form>
         <div className={styles.circles}>
-          {letters.map((elem, i) => <Circle letter={elem.value} state={elem.state} key={i} />)}
+          {letters.map((elem, i) => <Circle letter={elem} state={getLetterState(i)} key={i} />)}
         </div>
       </div>
     </SolutionLayout>
