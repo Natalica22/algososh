@@ -26,7 +26,7 @@ export const FibonacciPage: React.FC = () => {
   const [disabled, setDisabled] = useState(true);
   const [isLoader, setIsLoader] = useState(false);
 
-  const [fibonacci, setFibonacci] = useState([] as number[]);
+  const [fibonacci, setFibonacci] = useState<number[]>([]);
 
   const onInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;

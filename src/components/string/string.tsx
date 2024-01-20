@@ -7,13 +7,14 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
 import { Value } from "../../types/value";
+import { DELAY_IN_MS } from "../../constants/delays";
 
 export const StringComponent: React.FC = () => {
   const [text, setText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [isLoader, setIsLoader] = useState(false);
 
-  const [letters, setLetters] = useState([] as Value<string>[]);
+  const [letters, setLetters] = useState<Value<string>[]>([]);
 
   const onInputChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -34,7 +35,7 @@ export const StringComponent: React.FC = () => {
       return { value: e, state: ElementStates.Default }
     });
     setLetters([...lettersArray]);
-    await delay(1000);
+    await delay(DELAY_IN_MS);
 
     for (let i = 0; i < lettersArray.length / 2; i++) {
       const j = lettersArray.length - i - 1;

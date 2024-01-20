@@ -25,7 +25,7 @@ const swap = (arr: Value<number>[], firstIndex: number, secondIndex: number): vo
 };
 
 export const SortingPage: React.FC = () => {
-  const [array, setArray] = useState([] as Value<number>[]);
+  const [array, setArray] = useState<Value<number>[]>([]);
   const [method, setMethod] = useState(SortingMethod.Selection);
 
   const [ascendingInProgress, setAscendingInProgress] = useState(false);

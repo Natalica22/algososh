@@ -26,7 +26,7 @@ export const ListPage: React.FC = () => {
 
   const list = useMemo(() => new LinkedList<Value<string>>(initArray), [initArray]);
   const [text, setText] = useState('');
-  const [index, setIndex] = useState(null as number | null);
+  const [index, setIndex] = useState<number | null>(null);
   const [prependInProgress, setPrependInProgress] = useState(false);
   const [appendInProgress, setAppendInProgress] = useState(false);
   const [deleteHeadInProgress, setDeleteHeadInProgress] = useState(false);
