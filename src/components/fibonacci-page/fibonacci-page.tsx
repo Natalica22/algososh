@@ -5,21 +5,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { delay } from "../../utils/delay";
-
-
-const getFibonacciNumbers = (size: number) => {
-  const fibonacciArray = new Array<number>();
-
-  for (let i = 0; i < 2; i++) {
-    fibonacciArray[i] = 1;
-  }
-
-  for (let i = 2; i <= size; i++) {
-    fibonacciArray[i] = fibonacciArray[i - 2] + fibonacciArray[i - 1];
-  }
-
-  return fibonacciArray;
-}
+import { getFibonacciNumbers } from "./utils";
 
 export const FibonacciPage: React.FC = () => {
   const [number, setNumber] = useState(0);
@@ -44,12 +30,11 @@ export const FibonacciPage: React.FC = () => {
 
   const generateFibonacci = async () => {
     setIsLoader(true);
-    const arr = getFibonacciNumbers(number);
-    const tempArray = [];
+
+    const fibArray = getFibonacciNumbers(number);
 
     for (let i = 0; i <= number; i++) {
-      tempArray[i] = arr[i];
-      setFibonacci([...tempArray]);
+      setFibonacci([...fibArray.slice(0, i + 1)]);
       await delay();
     }
 
