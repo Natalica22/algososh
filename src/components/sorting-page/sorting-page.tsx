@@ -7,9 +7,8 @@ import { Direction } from "../../types/direction";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/delay";
-import { Value } from "../../types/value";
+import { bubbleSort, selectionSort } from "./utils";
 import { createArray } from "../../utils/random";
-import { swap } from "../../utils/array";
 
 enum SortingMethod {
   Selection = "selection",
@@ -20,8 +19,12 @@ const MAX_ARRAY_SIZE = 17;
 const MIN_ARRAY_SIZE = 3;
 
 export const SortingPage: React.FC = () => {
-  const [array, setArray] = useState<Value<number>[]>([]);
+  const [array, setArray] = useState<number[]>([]);
   const [method, setMethod] = useState(SortingMethod.Selection);
+
+  const [firstIndex, setFirstIndex] = useState<number | null>(null);
+  const [secondIndex, setSecondIndex] = useState<number | null>(null);
+  const [sortedIndexes, setSortedIndexes] = useState<number[]>([]);
 
   const [ascendingInProgress, setAscendingInProgress] = useState(false);
   const [descendingInProgress, setDescendingInProgress] = useState(false);
@@ -32,8 +35,13 @@ export const SortingPage: React.FC = () => {
 
   const randomArr = () => {
     const arr = createArray(MIN_ARRAY_SIZE, MAX_ARRAY_SIZE, 0, 100);
+    setFirstIndex(null);
+    setSecondIndex(null);
+    setSortedIndexes([]);
     setArray([...arr]);
   }
+
+  useEffect(() => randomArr(), []);
 
   const onChangeMethod = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -57,71 +65,31 @@ export const SortingPage: React.FC = () => {
   }
 
   const sortArray = async (desc: boolean) => {
-    if (method === SortingMethod.Selection) {
-      await selectionSort(desc);
-    } else {
-      await bubbleSort(desc);
+    setFirstIndex(null);
+    setSecondIndex(null);
+    setSortedIndexes([]);
+    const steps = method === SortingMethod.Selection ? selectionSort([...array], desc) : bubbleSort([...array], desc);
+
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      setArray(step.array);
+      setFirstIndex(step.i);
+      setSecondIndex(step.j);
+      setSortedIndexes(step.sortedIndexes);
+
+      await delay();
     }
   }
 
-  const selectionSort = async (desc: boolean) => {
-    const arr = [...array].map(e => {
-      return { ...e, state: ElementStates.Default }
-    });
-    const { length } = arr;
-
-    for (let i = 0; i < length - 1; i++) {
-      arr[i].state = ElementStates.Changing;
-      let maxInd = i;
-      for (let j = i + 1; j < length; j++) {
-        arr[j].state = ElementStates.Changing;
-        setArray([...arr]);
-        await delay();
-
-        if ((desc && arr[j].value > arr[maxInd].value) || (!desc && arr[j].value < arr[maxInd].value)) {
-          maxInd = j;
-        }
-        arr[j].state = ElementStates.Default;
-      }
-
-      arr[i].state = ElementStates.Default;
-      if (maxInd !== i) {
-        swap(arr, i, maxInd);
-      }
-      arr[i].state = ElementStates.Modified;
+  const getState = (index: number): ElementStates => {
+    if (sortedIndexes.includes(index)) {
+      return ElementStates.Modified;
     }
-    arr[arr.length - 1].state = ElementStates.Modified;
-
-    setArray([...arr]);
-  }
-
-  const bubbleSort = async (desc: boolean) => {
-    const arr = [...array].map(e => {
-      return { ...e, state: ElementStates.Default }
-    });
-
-    for (let j = arr.length - 1; j > 0; j--) {
-      for (let i = 0; i < j; i++) {
-        arr[i].state = ElementStates.Changing;
-        arr[i + 1].state = ElementStates.Changing;
-        setArray([...arr]);
-        await delay();
-
-        if ((desc && arr[i].value < arr[i + 1].value) || (!desc && arr[i].value > arr[i + 1].value)) {
-          swap(arr, i, i + 1);
-        }
-        arr[i].state = ElementStates.Default;
-        arr[i + 1].state = ElementStates.Default;
-      }
-      arr[j].state = ElementStates.Modified;
+    if (index === firstIndex || index === secondIndex) {
+      return ElementStates.Changing;
     }
-
-    arr[0].state = ElementStates.Modified;
-
-    setArray([...arr]);
+    return ElementStates.Default;
   }
-
-  useEffect(() => randomArr(), []);
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -140,7 +108,7 @@ export const SortingPage: React.FC = () => {
           <Button text='Новый массив' extraClass={styles.button} onClick={onGenerateArrayButtonClick} disabled={ascendingInProgress || descendingInProgress} />
         </div>
         <div className={styles.columns}>
-          {array.map((elem, i) => <Column index={elem.value} state={elem.state} key={i} />)}
+          {array.map((elem, i) => <Column index={elem} state={getState(i)} key={i} />)}
         </div>
       </div>
     </SolutionLayout>

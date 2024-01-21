@@ -21,7 +21,7 @@ const MAX_LIST_SIZE = 6;
 
 export const ListPage: React.FC = () => {
   const initArray = useMemo(() => createArray(3, 6, 0, 9999).map(x => {
-    return { ...x, value: x.value.toString() }
+    return { value: x.toString(), state: ElementStates.Default }
   }), []);
 
   const list = useMemo(() => new LinkedList<Value<string>>(initArray), [initArray]);
