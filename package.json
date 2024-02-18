@@ -9,7 +9,7 @@
     "@types/jest": "^27.4.0",
     "@types/node": "^16.11.22",
     "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
+    "@types/react-dom": "^18.2.19",
     "nanoid": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
