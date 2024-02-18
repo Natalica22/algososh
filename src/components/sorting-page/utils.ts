@@ -7,7 +7,7 @@ export type SortingStep<T> = {
   j: number | null;
 }
 
-const step = <T>(array: T[], sortedIndexes: number[], i: number | null, j: number | null) => ({
+export const step = <T>(array: T[], sortedIndexes: number[], i: number | null, j: number | null) => ({
   array: [...array],
   sortedIndexes: [...sortedIndexes],
   i: i,
@@ -34,7 +34,9 @@ export const selectionSort = <T>(array: T[], desc: boolean): SortingStep<T>[] =>
     }
     sortedIndexes.push(i);
   }
-  sortedIndexes.push(length - 1);
+  if (length > 0) {
+    sortedIndexes.push(length - 1);
+  }
   steps.push(step(array, sortedIndexes, null, null));
 
   return steps;
@@ -55,7 +57,9 @@ export const bubbleSort = <T>(array: T[], desc: boolean): SortingStep<T>[] => {
     sortedIndexes.push(j);
   }
 
-  sortedIndexes.push(0);
+  if (array.length > 0) {
+    sortedIndexes.push(0);
+  }
   steps.push(step(array, sortedIndexes, null, null));
 
   return steps;
