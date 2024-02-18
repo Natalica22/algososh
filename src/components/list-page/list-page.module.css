@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 120px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.menu_row {
+  display: flex;
+  column-gap: 12px;
+  width: 952px;
+}
+
+.input {
+  width: 204px;
+}
+
+.button {
+  width: 175px;
+}
+
+.big_button {
+  width: 362px;
+}
+
+.list {
+  display: flex;
+  column-gap: 16px;
+}
+
+.list_elem {
+  display: flex;
+  column-gap: 16px;
+  align-items: center;
+  position: relative;
+}
+
+.top_circle {
+  position: absolute;
+  top: -64px;
+  left: 12px;
+}
+
+.bottom_circle {
+  position: absolute;
+  bottom: -94px;
+  right: 12px;
+}
