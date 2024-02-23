@@ -66,10 +66,10 @@ export const StringComponent: React.FC = () => {
     <SolutionLayout title="Строка">
       <div className={styles.container}>
         <form className={styles.form} onSubmit={onFormSubmit}>
-          <Input maxLength={11} isLimitText={true} onChange={onInputChanged} />
-          <Button text='Развернуть' disabled={disabled} isLoader={isLoader} type='submit' />
+          <Input maxLength={11} isLimitText={true} onChange={onInputChanged} data-testid='input'/>
+          <Button text='Развернуть' disabled={disabled} isLoader={isLoader} type='submit' data-testid='button'/>
         </form>
-        <div className={styles.circles}>
+        <div className={styles.circles} data-testid='circles'>
           {letters.map((elem, i) => <Circle letter={elem} state={getLetterState(i)} key={i} />)}
         </div>
       </div>
