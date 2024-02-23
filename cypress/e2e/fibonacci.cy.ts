@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { CIRCLES, DEFAULT_STATE } from "../constants";
-import { checkCircles } from "./utils";
+import { Cicle, checkCircles } from "./utils";
 
 const inputSelector = '[data-testid="input"]';
 const buttonSelector = '[data-testid="button"]';
@@ -30,41 +30,70 @@ describe('Fibonacci', () => {
 
     cy.get(CIRCLES).children().should('have.length', 1);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1'], [DEFAULT_STATE]);
+      checkCircles(elem,
+        [
+          new Cicle('1', DEFAULT_STATE)
+        ]);
     });
     cy.wait(500);
 
     cy.get(CIRCLES).children().should('have.length', 2);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1', '1'], [DEFAULT_STATE, DEFAULT_STATE]);
+      checkCircles(elem, 
+        [
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('1', DEFAULT_STATE)
+        ]);
     });
     cy.wait(500);
 
     cy.get(CIRCLES).children().should('have.length', 3);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1', '1', '2'],
-        [DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE]);
+      checkCircles(elem,
+        [
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('2', DEFAULT_STATE)
+        ]);
     });
     cy.wait(500);
 
     cy.get(CIRCLES).children().should('have.length', 4);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1', '1', '2', '3'],
-        [DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE]);
+      checkCircles(elem,
+        [
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('2', DEFAULT_STATE),
+          new Cicle('3', DEFAULT_STATE)
+        ]);
     });
     cy.wait(500);
 
     cy.get(CIRCLES).children().should('have.length', 5);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1', '1', '2', '3', '5'],
-        [DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE]);
+      checkCircles(elem,
+        [
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('2', DEFAULT_STATE),
+          new Cicle('3', DEFAULT_STATE),
+          new Cicle('5', DEFAULT_STATE)
+        ]);
     });
     cy.wait(500);
 
     cy.get(CIRCLES).children().should('have.length', 6);
     cy.get(CIRCLES).then(elem => {
-      checkCircles(elem, ['1', '1', '2', '3', '5', '8'],
-        [DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE, DEFAULT_STATE]);
+      checkCircles(elem,
+        [
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('1', DEFAULT_STATE),
+          new Cicle('2', DEFAULT_STATE),
+          new Cicle('3', DEFAULT_STATE),
+          new Cicle('5', DEFAULT_STATE),
+          new Cicle('8', DEFAULT_STATE)
+        ]);
     });
   });
 });
