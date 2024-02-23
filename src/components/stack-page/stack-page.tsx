@@ -63,13 +63,13 @@ export const StackPage: React.FC = () => {
       <div className={styles.container} >
         <div className={styles.menu}>
           <div className={styles.input_panel}>
-            <Input placeholder='Введите значение' maxLength={4} isLimitText={true} extraClass={styles.input} onChange={onInputChanged} value={text} disabled={stackView.length === MAX_STACK_SIZE} />
-            <Button text='Добавить' extraClass={styles.button} disabled={text.length === 0 || popInProgress || stackView.length === MAX_STACK_SIZE} onClick={onPushClick} />
-            <Button text='Удалить' extraClass={styles.button} disabled={pushInProgress || stackView.length === 0} onClick={onPopClick} />
+            <Input placeholder='Введите значение' maxLength={4} isLimitText={true} extraClass={styles.input} onChange={onInputChanged} value={text} disabled={stackView.length === MAX_STACK_SIZE} data-testid='input' />
+            <Button text='Добавить' extraClass={styles.button} disabled={text.length === 0 || popInProgress || stackView.length === MAX_STACK_SIZE} onClick={onPushClick} data-testid='addButton' />
+            <Button text='Удалить' extraClass={styles.button} disabled={pushInProgress || stackView.length === 0} onClick={onPopClick} data-testid='deleteButton' />
           </div>
-          <Button text='Очистить' extraClass={styles.button} onClick={onClearClick} disabled={stackView.length === 0 || pushInProgress || popInProgress} />
+          <Button text='Очистить' extraClass={styles.button} onClick={onClearClick} disabled={stackView.length === 0 || pushInProgress || popInProgress} data-testid='clearButton' />
         </div>
-        <div className={styles.stack}>
+        <div className={styles.stack} data-testid='circles'>
           {stackView.map((elem, i) => <Circle letter={elem.value} state={elem.state} key={i} index={i} head={i === stackView.length - 1 ? 'top' : null} />)}
         </div>
       </div>
