@@ -45,10 +45,10 @@ export const FibonacciPage: React.FC = () => {
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={styles.container}>
         <form className={styles.form} onSubmit={onFormSubmit}>
-          <Input max={19} min={1} isLimitText={true} type='number' onChange={onInputChanged}/>
-          <Button text='Рассчитать' disabled={disabled} isLoader={isLoader} type='submit' />
+          <Input max={19} min={1} isLimitText={true} type='number' onChange={onInputChanged} data-testid='input' />
+          <Button text='Рассчитать' disabled={disabled} isLoader={isLoader} type='submit' data-testid='button' />
         </form>
-        <div className={styles.circles}>
+        <div className={styles.circles} data-testid='circles'>
           {fibonacci.map((elem, i) => <Circle letter={elem.toString()} key={i} index={i} />)}
         </div>
       </div>

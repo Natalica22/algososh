@@ -17,7 +17,7 @@ type ValueView<T> = {
   delete?: Value<T> | null;
 }
 
-const MAX_LIST_SIZE = 6;
+const MAX_LIST_SIZE = 7;
 
 export const ListPage: React.FC = () => {
   const initArray = useMemo(() => createArray(3, 6, 0, 9999).map(x => {
@@ -196,32 +196,36 @@ export const ListPage: React.FC = () => {
         <div className={styles.menu}>
           <div className={styles.menu_row}>
             <Input placeholder='Введите значение' maxLength={4} isLimitText={true} extraClass={styles.input} value={text} onChange={onTextInputChanged}
-              disabled={list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
+              disabled={list.getSize() === MAX_LIST_SIZE || buttonsDisabled}  data-testid='inputText' />
             <Button text='Добавить в head' extraClass={styles.button} isLoader={prependInProgress} onClick={onPrependClick}
-              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} data-testid='prependButton' />
             <Button text='Добавить в tail' extraClass={styles.button} isLoader={appendInProgress} onClick={onAppendClick}
-              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} />
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled} data-testid='appendButton' />
             <Button text='Удалить из head' extraClass={styles.button} isLoader={deleteHeadInProgress} onClick={onDeleteHeadClick}
-              disabled={list.getSize() === 0 || buttonsDisabled} />
+              disabled={list.getSize() === 0 || buttonsDisabled} data-testid='deleteHeadButton' />
             <Button text='Удалить из tail' extraClass={styles.button} isLoader={deleteTailInProgress} onClick={onDeleteTailClick}
-              disabled={list.getSize() === 0 || buttonsDisabled} />
+              disabled={list.getSize() === 0 || buttonsDisabled} data-testid='deleteTailButton' />
           </div>
           <div className={styles.menu_row}>
             <Input placeholder='Введите индекс' extraClass={styles.input} value={index === null ? '' : index.toString()} onChange={onIndexInputChanged}
-              disabled={buttonsDisabled} max={list.getSize() - 1} type='number' />
+              disabled={buttonsDisabled} max={list.getSize() - 1} type='number'  data-testid='inputIndex' />
             <Button text='Добавить по индексу' extraClass={styles.big_button} isLoader={addByIndexInProgress}
-              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled || index === null} onClick={onAddByIndexClick} />
+              disabled={text.length === 0 || list.getSize() === MAX_LIST_SIZE || buttonsDisabled || index === null} 
+              onClick={onAddByIndexClick} data-testid='addByIndexButton' />
             <Button text='Удалить по индексу' extraClass={styles.big_button} isLoader={deleteByIndexInProgress}
-              disabled={list.getSize() === 0 || buttonsDisabled || index === null} onClick={onDeleteByIndexClick} />
+              disabled={list.getSize() === 0 || buttonsDisabled || index === null} onClick={onDeleteByIndexClick} data-testid='deleteByIndexButton' />
           </div>
         </div>
-        <div className={styles.list}>
+        <div className={styles.list} data-testid='circles'>
           {listView.map((elem, i) => {
             return (<div key={i} className={styles.list_elem}>
-              {elem.insert && <Circle isSmall={true} extraClass={styles.top_circle} letter={elem.insert.value} state={ElementStates.Changing} />}
-              {elem.delete && <Circle isSmall={true} extraClass={styles.bottom_circle} letter={elem.delete.value} state={ElementStates.Changing} />}
               {(deleteInProgress && i !== 0) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
-              <Circle letter={elem.value.value} state={elem.value.state} index={i} head={i === 0 && !elem.insert ? 'head' : ''} tail={i === listView.length - 1 && !elem.delete ? 'tail' : ''} />
+              <Circle 
+                letter={elem.value.value}
+                state={elem.value.state}
+                index={i}
+                head={elem.insert ? <Circle isSmall={true} letter={elem.insert.value} state={ElementStates.Changing} /> : i === 0 ? 'head' : null}
+                tail={elem.delete ? <Circle isSmall={true} letter={elem.delete.value} state={ElementStates.Changing} /> : i === listView.length - 1 ? 'tail' : null} />
               {(!deleteInProgress && i !== listView.length - 1) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
             </div>)
           })}
