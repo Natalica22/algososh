@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { CHANGING_STATE, CIRCLES, DEFAULT_STATE } from "../constants";
-import { Cicle, checkCircles } from "./utils";
+import { Circle, checkCircles } from "./utils";
 
 const inputSelector = '[data-testid="input"]';
 const addButtonSelector = '[data-testid="addButton"]';
@@ -34,14 +34,14 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', CHANGING_STATE, 'top')
+          new Circle('1', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE, 'top')
         ]);
     });
 
@@ -52,16 +52,16 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', CHANGING_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE, 'top')
         ]);
     });
 
@@ -72,18 +72,18 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', CHANGING_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE, 'top')
         ]);
     });
   });
@@ -105,9 +105,9 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE, 'top')
         ]);
     });
 
@@ -115,17 +115,17 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', CHANGING_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE, 'top')
         ]);
     });
     cy.get(CIRCLES).children().should('have.length', 2);
@@ -134,15 +134,15 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', CHANGING_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE, 'top')
         ]);
     });
     cy.get(CIRCLES).children().should('have.length', 1);
@@ -151,7 +151,7 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', CHANGING_STATE, 'top')
+          new Circle('1', CHANGING_STATE, 'top')
         ]);
     });
     cy.wait(500);
@@ -176,9 +176,9 @@ describe('Stack', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE, 'top')
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE, 'top')
         ]);
     });
 

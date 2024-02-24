@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { CIRCLES, DEFAULT_STATE } from "../constants";
-import { Cicle, checkCircles } from "./utils";
+import { Circle, checkCircles } from "./utils";
 
 const inputSelector = '[data-testid="input"]';
 const buttonSelector = '[data-testid="button"]';
@@ -32,7 +32,7 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE)
         ]);
     });
     cy.wait(500);
@@ -41,8 +41,8 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem, 
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('1', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('1', DEFAULT_STATE)
         ]);
     });
     cy.wait(500);
@@ -51,9 +51,9 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE)
         ]);
     });
     cy.wait(500);
@@ -62,10 +62,10 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE)
         ]);
     });
     cy.wait(500);
@@ -74,11 +74,11 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE),
-          new Cicle('5', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE),
+          new Circle('5', DEFAULT_STATE)
         ]);
     });
     cy.wait(500);
@@ -87,12 +87,12 @@ describe('Fibonacci', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE),
-          new Cicle('5', DEFAULT_STATE),
-          new Cicle('8', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE),
+          new Circle('5', DEFAULT_STATE),
+          new Circle('8', DEFAULT_STATE)
         ]);
     });
   });

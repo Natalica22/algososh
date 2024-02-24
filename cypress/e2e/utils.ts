@@ -2,22 +2,24 @@
 
 import { CIRCLE_CIRCLE, CIRCLE_HEAD, CIRCLE_TAIL, CIRCLE_TEXT, DEFAULT_STATE } from "../constants"
 
-export class Cicle {
+export class Circle {
   constructor(
     public letter: string | null = null,
     public className: string = DEFAULT_STATE,
     public topText: string | null = null,
-    public bottomText: string | null = null
+    public bottomText: string | null = null,
+    public topCircle: Circle | null = null,
+    public bottomCircle: Circle | null = null
   ) { }
 }
 
 const checkCircle = (
   elem: JQuery<HTMLElement>,
-  cicle: Cicle) => {
-  if (cicle.letter) {
+  circle: Circle) => {
+  if (circle.letter) {
     cy.wrap(elem)
       .find(CIRCLE_TEXT)
-      .should('have.text', cicle.letter);
+      .should('have.text', circle.letter);
   } else {
     cy.wrap(elem)
       .find(CIRCLE_TEXT)
@@ -27,26 +29,38 @@ const checkCircle = (
   cy.wrap(elem)
     .find(CIRCLE_CIRCLE)
     .invoke('attr', 'class')
-    .then(c => expect(c).contains(cicle.className));
+    .then(c => expect(c).contains(circle.className));
 
-  if (cicle.topText) {
+  if (circle.topText) {
     cy.wrap(elem)
       .find(CIRCLE_HEAD)
-      .should('have.text', cicle.topText);
+      .should('have.text', circle.topText);
   }
 
-  if (cicle.bottomText) {
+  if (circle.bottomText) {
     cy.wrap(elem)
       .find(CIRCLE_TAIL)
-      .should('have.text', cicle.bottomText);
+      .should('have.text', circle.bottomText);
+  }
+
+  if (circle.topCircle) {
+    cy.wrap(elem)
+      .find(CIRCLE_HEAD)
+      .then(elem => checkCircle(elem, circle.topCircle as Circle));
+  }
+
+  if (circle.bottomCircle) {
+    cy.wrap(elem)
+      .find(CIRCLE_HEAD)
+      .then(elem => checkCircle(elem, circle.bottomCircle as Circle));
   }
 }
 
 export const checkCircles = (
   parent: JQuery<HTMLElement>,
-  cicles: Cicle[]) => {
+  circles: Circle[]) => {
 
   cy.wrap(parent).children().each((elem, i) => {
-    checkCircle(elem, cicles[i]);
+    checkCircle(elem, circles[i]);
   });
 }

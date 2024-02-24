@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { CHANGING_STATE, CIRCLES, DEFAULT_STATE, MODIFIED_STATE } from "../constants";
-import { Cicle, checkCircles } from "./utils";
+import { Circle, checkCircles } from "./utils";
 
 const inputSelector = '[data-testid="input"]';
 const buttonSelector = '[data-testid="button"]';
@@ -32,10 +32,10 @@ describe('String', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', DEFAULT_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE),
-          new Cicle('4', DEFAULT_STATE)
+          new Circle('1', DEFAULT_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE),
+          new Circle('4', DEFAULT_STATE)
         ]);
     });
     cy.wait(1000);
@@ -43,10 +43,10 @@ describe('String', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('1', CHANGING_STATE),
-          new Cicle('2', DEFAULT_STATE),
-          new Cicle('3', DEFAULT_STATE),
-          new Cicle('4', CHANGING_STATE)
+          new Circle('1', CHANGING_STATE),
+          new Circle('2', DEFAULT_STATE),
+          new Circle('3', DEFAULT_STATE),
+          new Circle('4', CHANGING_STATE)
         ]);
     });
     cy.wait(1000);
@@ -54,10 +54,10 @@ describe('String', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('4', MODIFIED_STATE),
-          new Cicle('2', CHANGING_STATE),
-          new Cicle('3', CHANGING_STATE),
-          new Cicle('1', MODIFIED_STATE)
+          new Circle('4', MODIFIED_STATE),
+          new Circle('2', CHANGING_STATE),
+          new Circle('3', CHANGING_STATE),
+          new Circle('1', MODIFIED_STATE)
         ]);
     });
     cy.wait(1000);
@@ -65,10 +65,10 @@ describe('String', () => {
     cy.get(CIRCLES).then(elem => {
       checkCircles(elem,
         [
-          new Cicle('4', MODIFIED_STATE),
-          new Cicle('3', MODIFIED_STATE),
-          new Cicle('2', MODIFIED_STATE),
-          new Cicle('1', MODIFIED_STATE)
+          new Circle('4', MODIFIED_STATE),
+          new Circle('3', MODIFIED_STATE),
+          new Circle('2', MODIFIED_STATE),
+          new Circle('1', MODIFIED_STATE)
         ]);
     });
   });
