@@ -219,10 +219,13 @@ export const ListPage: React.FC = () => {
         <div className={styles.list} data-testid='circles'>
           {listView.map((elem, i) => {
             return (<div key={i} className={styles.list_elem}>
-              {elem.insert && <Circle isSmall={true} extraClass={styles.top_circle} letter={elem.insert.value} state={ElementStates.Changing} />}
-              {elem.delete && <Circle isSmall={true} extraClass={styles.bottom_circle} letter={elem.delete.value} state={ElementStates.Changing} />}
               {(deleteInProgress && i !== 0) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
-              <Circle letter={elem.value.value} state={elem.value.state} index={i} head={i === 0 && !elem.insert ? 'head' : ''} tail={i === listView.length - 1 && !elem.delete ? 'tail' : ''} />
+              <Circle 
+                letter={elem.value.value}
+                state={elem.value.state}
+                index={i}
+                head={elem.insert ? <Circle isSmall={true} letter={elem.insert.value} state={ElementStates.Changing} /> : i === 0 ? 'head' : null}
+                tail={elem.delete ? <Circle isSmall={true} letter={elem.delete.value} state={ElementStates.Changing} /> : i === listView.length - 1 ? 'tail' : null} />
               {(!deleteInProgress && i !== listView.length - 1) && <ArrowIcon fill={elem.value.state === ElementStates.Changing ? '#D252E1' : '#0032FF'} />}
             </div>)
           })}

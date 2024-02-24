@@ -40,15 +40,3 @@
   align-items: center;
   position: relative;
 }
-
-.top_circle {
-  position: absolute;
-  top: -64px;
-  left: 12px;
-}
-
-.bottom_circle {
-  position: absolute;
-  bottom: -94px;
-  right: 12px;
-}
