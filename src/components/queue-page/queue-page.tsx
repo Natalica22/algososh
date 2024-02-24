@@ -73,16 +73,16 @@ export const QueuePage: React.FC = () => {
         <div className={styles.menu}>
           <div className={styles.input_panel}>
             <Input placeholder='Введите значение' maxLength={4} isLimitText={true} extraClass={styles.input}
-              onChange={onInputChanged} value={text} disabled={queue.getSize() === MAX_QUEUE_SIZE} />
+              onChange={onInputChanged} value={text} disabled={queue.getSize() === MAX_QUEUE_SIZE} data-testid='input' />
             <Button text='Добавить' extraClass={styles.button} disabled={text.length === 0 || dequeueInProgress || queue.getSize() === MAX_QUEUE_SIZE}
-              onClick={onEnqueueClick} />
+              onClick={onEnqueueClick} data-testid='addButton' />
             <Button text='Удалить' extraClass={styles.button} disabled={enqueueInProgress || queue.getSize() === 0}
-              onClick={onDequeueClick} />
+              onClick={onDequeueClick} data-testid='deleteButton' />
           </div>
           <Button text='Очистить' extraClass={styles.button} onClick={onClearClick}
-            disabled={(queue.getSize() === 0 && queue.isEmpty()) || enqueueInProgress || dequeueInProgress} />
+            disabled={(queue.getSize() === 0 && queue.isEmpty()) || enqueueInProgress || dequeueInProgress} data-testid='clearButton' />
         </div>
-        <div className={styles.queue}>
+        <div className={styles.queue} data-testid='circles'>
           {queueView.map((elem, i) => <Circle letter={elem.value?.value} state={elem.value?.state}
             key={i} index={i} head={elem.head ? 'head' : ''} tail={elem.tail ? 'tail' : ''} />)}
         </div>

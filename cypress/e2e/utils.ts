@@ -1,12 +1,13 @@
 /// <reference types="cypress" />
 
-import { CIRCLE_CIRCLE, CIRCLE_HEAD, CIRCLE_TEXT } from "../constants"
+import { CIRCLE_CIRCLE, CIRCLE_HEAD, CIRCLE_TAIL, CIRCLE_TEXT, DEFAULT_STATE } from "../constants"
 
 export class Cicle {
   constructor(
-    public letter: string | null,
-    public className: string,
-    public topText: string | null = null
+    public letter: string | null = null,
+    public className: string = DEFAULT_STATE,
+    public topText: string | null = null,
+    public bottomText: string | null = null
   ) { }
 }
 
@@ -32,6 +33,12 @@ const checkCircle = (
     cy.wrap(elem)
       .find(CIRCLE_HEAD)
       .should('have.text', cicle.topText);
+  }
+
+  if (cicle.bottomText) {
+    cy.wrap(elem)
+      .find(CIRCLE_TAIL)
+      .should('have.text', cicle.bottomText);
   }
 }
 
