@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-import { CHANGING_STATE, CIRCLES, DEFAULT_STATE } from "../constants";
-import { Cicle, checkCircles } from "./utils";
+import { CHANGING_STATE, CIRCLES, CIRCLE_TEXT, DEFAULT_STATE, MODIFIED_STATE } from "../constants";
+import { Circle, checkCircles } from "./utils";
 
 const inputTextSelector = '[data-testid="inputText"]';
 const prependButtonSelector = '[data-testid="prependButton"]';
@@ -51,11 +51,81 @@ describe('List', () => {
       .should('have.length.at.least', 3).and('have.length.at.most', 6);
   });
 
-  it('delete elems - animation', () => {
+  it('prepend', () => {
+    const initialData: string[] = [];
+    cy.get(CIRCLES).children().find(CIRCLE_TEXT).each(t => {
+      initialData.push(t.text());
+    });
 
+    cy.get(inputTextSelector).type('999');
+    cy.get(prependButtonSelector).click();
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          new Circle(initialData[0], DEFAULT_STATE, null, null, new Circle('999', CHANGING_STATE)),
+          ...initialData.slice(1).map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, null, i === initialData.length ? 'tail' : null)
+          })
+        ]);
+    });
+    cy.wait(500);
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          new Circle('999', MODIFIED_STATE, 'head'),
+          ...initialData.map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, null, i === initialData.length ? 'tail' : null)
+          })
+        ]);
+    });
+    cy.wait(500);
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          new Circle('999', DEFAULT_STATE, 'head'),
+          ...initialData.map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, null, i === initialData.length - 1 ? 'tail' : null)
+          })
+        ]);
+    });
   });
 
-  it('clear elems - animation', () => {
+  it('append', () => {
+    const initialData: string[] = [];
+    cy.get(CIRCLES).children().find(CIRCLE_TEXT).each(t => {
+      initialData.push(t.text());
+    });
 
+    cy.get(inputTextSelector).type('999');
+    cy.get(appendButtonSelector).click();
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          ...initialData.slice(0, initialData.length - 1).map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, i === 0 ? 'head' : null)
+          }),
+          new Circle(initialData[initialData.length - 1], DEFAULT_STATE, null, 'tail', new Circle('999', CHANGING_STATE))
+        ]);
+    });
+    cy.wait(500);
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          ...initialData.map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, i === 0 ? 'head' : null)
+          }),
+          new Circle('999', MODIFIED_STATE, null, 'tail')
+        ]);
+    });
+    cy.wait(500);
+    cy.get(CIRCLES).then(elem => {
+      checkCircles(elem,
+        [
+          ...initialData.map((x, i) => {
+            return new Circle(x, DEFAULT_STATE, i === 0 ? 'head' : null)
+          }),
+          new Circle('999', DEFAULT_STATE, null, 'tail')
+        ]);
+    });
   });
 });
